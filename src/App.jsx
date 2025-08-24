@@ -5,15 +5,6 @@ import * as pdfjsLib from "pdfjs-dist";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.54/build/pdf.worker.min.mjs`;
 
-/**
- * React PDF Tool — compress, cut (extract), reorder, rotate & delete pages
- * All client‑side. Uses pdf.js to rasterize pages, and pdf-lib to rebuild the PDF.
- * Notes:
- *  - Compression is achieved by rasterizing pages to images and writing them to a new PDF
- *    with a quality slider. This reduces size but converts vectors/text to images.
- *  - Editing supported: reorder via drag handles, rotate 90°, delete selected, extract range.
- */
-
 const PageThumb = ({
   page,
   i,
