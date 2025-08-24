@@ -184,7 +184,7 @@ const App = () => {
     });
     setRotations(r);
   };
-
+  const time = Date.now();
   const selectAll = () => setSelected(new Set(order));
   const clearSel = () => setSelected(new Set());
 
@@ -251,7 +251,7 @@ const App = () => {
     return blob;
   };
 
-  const download = async (blob, name = "output.pdf") => {
+  const download = async (blob, name = `output-${time}.pdf`) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -280,7 +280,7 @@ const App = () => {
 
   const onDownloadAll = async () => {
     const blob = await buildPdf();
-    if (blob) download(blob, "edited.pdf");
+    if (blob) download(blob, `edited-${time}.pdf`);
   };
 
   const onExtractRange = async () => {
@@ -309,7 +309,7 @@ const App = () => {
       .map((n) => order[n - 1])
       .filter((v) => v !== undefined);
     const blob = await buildPdf(zeroIdx);
-    if (blob) download(blob, "extracted.pdf");
+    if (blob) download(blob, `extracted-${time}.pdf`);
   };
 
   const onDeleteSelected = () => deleteSelected();
@@ -368,7 +368,7 @@ const App = () => {
       const bytes = await merged.save();
       const blob = new Blob([bytes], { type: "application/pdf" });
       setStatus(`Merged ✔ Size ~ ${bytesToSize(bytes.byteLength)}`);
-      download(blob, "merged.pdf");
+      download(blob, `merged-${time}.pdf`);
     } catch (err) {
       console.error(err);
       setStatus("Merge failed ❌");
@@ -382,7 +382,7 @@ const App = () => {
     }
     const zeroIdx = order.filter((i) => selected.has(i));
     const blob = await buildPdf(zeroIdx);
-    if (blob) download(blob, "selected.pdf");
+    if (blob) download(blob, `selected-${time}.pdf`);
   };
 
   const onMergeDragStart = (e, id) => {
