@@ -78,6 +78,7 @@ function bytesToSize(bytes) {
 
 const App = () => {
   const fileRef = useRef();
+  const [showSingleInput, setShowSingleInput] = useState(true);
   const [file, setFile] = useState(null);
   const [pdf, setPdf] = useState(null);
   const [pages, setPages] = useState([]); // {thumbUrl, width, height}
@@ -420,134 +421,150 @@ const App = () => {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             PDF Compressor & Editor by Maidul365 🚀
           </h1>
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowSingleInput(!showSingleInput)}
+              className="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700"
+            >
+              {showSingleInput ? "Merge PDF" : "Edit A PDF"}
+            </button>
+          </div>
         </header>
 
         <div className="grid gap-4 md:grid-cols-3">
           {/* Left controls */}
           <section className="md:col-span-1 space-y-4">
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
-              <h2 className="font-semibold mb-2">1) Load a PDF</h2>
-              <input
-                type="file"
-                ref={fileRef}
-                accept="application/pdf"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="cursor-pointer block w-full text-sm file:mr-4 file:rounded-xl file:border file:border-gray-200 file:bg-gray-100 file:px-4 file:py-2 file:text-sm hover:file:bg-blue-700 dark:file:bg-gray-800 dark:file:border-gray-700"
-              />
-              {origSize > 0 && (
-                <div className="mt-2 text-xs text-gray-500">
-                  Original size: {bytesToSize(origSize)}
+            {showSingleInput ? (
+              <>
+                <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
+                  <h2 className="font-semibold mb-2">1) Load a PDF</h2>
+                  <input
+                    type="file"
+                    ref={fileRef}
+                    accept="application/pdf"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="cursor-pointer block w-full text-sm file:mr-4 file:rounded-xl file:border file:border-gray-200 file:bg-gray-100 file:px-4 file:py-2 file:text-sm hover:file:bg-blue-700 dark:file:bg-gray-800 dark:file:border-gray-700"
+                  />
+                  {origSize > 0 && (
+                    <div className="mt-2 text-xs text-gray-500">
+                      Original size: {bytesToSize(origSize)}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
-              {/* Merge tool */}
-              <div className="mt-4">
-                <h2 className="font-semibold mb-2">2) Merge multiple PDFs</h2>
 
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  ref={mergeRef}
-                  multiple
-                  onChange={(e) => onMergeUpload(e.target.files)}
-                  className="cursor-pointer block w-full text-sm file:mr-4 file:rounded-xl file:border file:border-gray-200 file:bg-gray-100 file:px-4 file:py-2 file:text-sm hover:file:bg-blue-700 dark:file:bg-gray-800 dark:file:border-gray-700"
-                />
+                <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
+                  <h2 className="font-semibold mb-3">2) Compression</h2>
+                  <label className="block text-sm mb-1">
+                    JPEG Quality: {quality.toFixed(2)}
+                  </label>
+                  <input
+                    type="range"
+                    min={0.2}
+                    max={1}
+                    step={0.05}
+                    value={quality}
+                    onChange={(e) => setQuality(parseFloat(e.target.value))}
+                    className="w-full cursor-grabbing"
+                  />
+                  <label className="block text-sm mt-3 mb-1">
+                    Render Scale (DPI): {scale.toFixed(2)}×
+                  </label>
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={2}
+                    step={0.1}
+                    value={scale}
+                    onChange={(e) => setScale(parseFloat(e.target.value))}
+                    className="w-full cursor-grabbing"
+                  />
+                  <p className="mt-2 text-xs text-gray-500">
+                    Lower quality/scale ⇒ smaller file, but lower clarity.
+                  </p>
+                </div>
+
+                {pdf && pages.length > 0 && (
+                  <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm space-y-2">
+                    <h2 className="font-semibold">3) Page Actions</h2>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={selectAll}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
+                      >
+                        Select all
+                      </button>
+                      <button
+                        type="button"
+                        onClick={clearSel}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
+                      >
+                        Clear
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onRotateSelected}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
+                      >
+                        Rotate selected
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onDeleteSelected}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
+                      >
+                        Delete selected
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={onExtractRange}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-emerald-600 text-white hover:bg-blue-700"
+                      >
+                        Cut / Extract range…
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onDownloadSelected}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
+                      >
+                        Download selected
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onDownloadAll}
+                        className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
+                      >
+                        Download edited (compress)
+                      </button>
+                    </div>
+
+                    {status && (
+                      <div className="text-xs text-gray-500 pt-2">{status}</div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
+                {/* Merge tool */}
+
+                <div className="mt-4">
+                  <h2 className="font-semibold mb-2">Merge multiple PDFs</h2>
+
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    ref={mergeRef}
+                    multiple
+                    onChange={(e) => onMergeUpload(e.target.files)}
+                    className="cursor-pointer block w-full text-sm file:mr-4 file:rounded-xl file:border file:border-gray-200 file:bg-gray-100 file:px-4 file:py-2 file:text-sm hover:file:bg-blue-700 dark:file:bg-gray-800 dark:file:border-gray-700"
+                  />
+                </div>
               </div>
-            </div>
-
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
-              <h2 className="font-semibold mb-3">3) Compression</h2>
-              <label className="block text-sm mb-1">
-                JPEG Quality: {quality.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min={0.2}
-                max={1}
-                step={0.05}
-                value={quality}
-                onChange={(e) => setQuality(parseFloat(e.target.value))}
-                className="w-full"
-              />
-              <label className="block text-sm mt-3 mb-1">
-                Render Scale (DPI): {scale.toFixed(2)}×
-              </label>
-              <input
-                type="range"
-                min={0.5}
-                max={2}
-                step={0.1}
-                value={scale}
-                onChange={(e) => setScale(parseFloat(e.target.value))}
-                className="w-full"
-              />
-              <p className="mt-2 text-xs text-gray-500">
-                Lower quality/scale ⇒ smaller file, but lower clarity.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm space-y-2">
-              <h2 className="font-semibold">3) Page Actions</h2>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={selectAll}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
-                >
-                  Select all
-                </button>
-                <button
-                  type="button"
-                  onClick={clearSel}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
-                >
-                  Clear
-                </button>
-                <button
-                  type="button"
-                  onClick={onRotateSelected}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
-                >
-                  Rotate selected
-                </button>
-                <button
-                  type="button"
-                  onClick={onDeleteSelected}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
-                >
-                  Delete selected
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={onExtractRange}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-emerald-600 text-white hover:bg-blue-700"
-                >
-                  Cut / Extract range…
-                </button>
-                <button
-                  type="button"
-                  onClick={onDownloadSelected}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
-                >
-                  Download selected
-                </button>
-                <button
-                  type="button"
-                  onClick={onDownloadAll}
-                  className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
-                >
-                  Download edited (compress)
-                </button>
-              </div>
-
-              {status && (
-                <div className="text-xs text-gray-500 pt-2">{status}</div>
-              )}
-            </div>
-
+            )}
             <div className="rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 p-4 text-xs text-gray-500">
               <p className="font-medium mb-1">Tips</p>
               <ul className="list-disc pl-5 space-y-1">
@@ -567,60 +584,68 @@ const App = () => {
 
           {/* Thumbnails */}
           <section className="md:col-span-2">
-            {mergeFiles.length > 0 && (
-              <div className="grid place-items-center h-64 rounded-2xl  text-gray-500 my-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {mergeOrder.map((id) => {
-                    const f = mergeFiles.find((mf) => mf.index === id);
-                    if (!f) return null;
-                    return (
-                      <div
-                        key={id}
-                        draggable
-                        onDragStart={(e) => onMergeDragStart(e, id)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => onMergeDrop(e, id)}
-                        className="flex flex-col items-center gap-3 rounded-lg border px-3 py-2 bg-gray-100 dark:bg-gray-800 cursor-grab active:cursor-grabbing"
-                      >
-                        {f.thumbUrl ? (
-                          <img
-                            src={f.thumbUrl}
-                            alt="thumb"
-                            className="w-12 h-16 object-contain border rounded"
-                          />
-                        ) : (
-                          <div className="w-12 h-16 flex items-center justify-center border rounded text-xs text-gray-400">
-                            PDF
+            {!showSingleInput ? (
+              mergeFiles.length > 0 ? (
+                <div className="grid place-items-center h-64 rounded-2xl  text-gray-500 my-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {mergeOrder.map((id) => {
+                      const f = mergeFiles.find((mf) => mf.index === id);
+                      if (!f) return null;
+                      return (
+                        <div
+                          key={id}
+                          draggable
+                          onDragStart={(e) => onMergeDragStart(e, id)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => onMergeDrop(e, id)}
+                          className="flex flex-col items-center gap-3 rounded-lg border px-3 py-2 bg-gray-100 dark:bg-gray-800 cursor-grab active:cursor-grabbing"
+                        >
+                          {f.thumbUrl ? (
+                            <img
+                              src={f.thumbUrl}
+                              alt="thumb"
+                              className="w-12 h-16 object-contain border rounded"
+                            />
+                          ) : (
+                            <div className="w-12 h-16 flex items-center justify-center border rounded text-xs text-gray-400">
+                              PDF
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm flex-1 text-center">
+                              {f.name}
+                            </p>
+                            <p className="text-xs text-gray-500">⋮⋮ drag</p>
                           </div>
-                        )}
-                        <div className="flex items-center gap-2">
-                          <p className="text-sm flex-1 text-center">{f.name}</p>
-                          <p className="text-xs text-gray-500">⋮⋮ drag</p>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
 
-                <div className="flex gap-4 mb-4">
-                  <button
-                    type="button"
-                    onClick={mergePdfs}
-                    className="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700"
-                  >
-                    Merge in this order
-                  </button>
-                  <button
-                    type="button"
-                    onClick={clearMergeList}
-                    className="mt-4 px-4 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-800"
-                  >
-                    Clear
-                  </button>
+                  <div className="flex gap-4 mb-4">
+                    <button
+                      type="button"
+                      onClick={mergePdfs}
+                      className="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700"
+                    >
+                      Merge in this order
+                    </button>
+                    <button
+                      type="button"
+                      onClick={clearMergeList}
+                      className="mt-4 px-4 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-800"
+                    >
+                      Clear
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-            {!pdf && !mergeFiles.length > 0 ? (
+              ) : (
+                <div className="grid place-items-center h-64 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
+                  Load a PDF to begin.
+                </div>
+              )
+            ) : null}
+            {showSingleInput && !pdf && !mergeFiles.length > 0 ? (
               <div className="grid place-items-center h-64 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
                 Load a PDF to begin.
               </div>
