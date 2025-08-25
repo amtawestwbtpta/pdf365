@@ -495,49 +495,53 @@ const App = () => {
                         >
                           Select all
                         </button>
-                        <button
-                          type="button"
-                          onClick={clearSel}
-                          className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
-                        >
-                          Clear
-                        </button>
-                        <button
-                          type="button"
-                          onClick={onRotateSelected}
-                          className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
-                        >
-                          Rotate selected
-                        </button>
-                        <button
-                          type="button"
-                          onClick={onDeleteSelected}
-                          className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
-                        >
-                          Delete selected
-                        </button>
-                      </div>
-                      <div className="flex flex-wrap gap-2 pt-2">
+                        {selected.size > 0 && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={clearSel}
+                              className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
+                            >
+                              Clear
+                            </button>
+                            <button
+                              type="button"
+                              onClick={onRotateSelected}
+                              className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
+                            >
+                              Rotate selected
+                            </button>
+                            <button
+                              type="button"
+                              onClick={onDeleteSelected}
+                              className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
+                            >
+                              Delete selected
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={onDownloadSelected}
+                              className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
+                            >
+                              Download selected
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={onDownloadAll}
+                              className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
+                            >
+                              Download edited (compress)
+                            </button>
+                          </>
+                        )}
                         <button
                           type="button"
                           onClick={onExtractRange}
                           className="cursor-pointer px-3 py-2 rounded-xl bg-emerald-600 text-white hover:bg-blue-700"
                         >
                           Cut / Extract range…
-                        </button>
-                        <button
-                          type="button"
-                          onClick={onDownloadSelected}
-                          className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
-                        >
-                          Download selected
-                        </button>
-                        <button
-                          type="button"
-                          onClick={onDownloadAll}
-                          className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
-                        >
-                          Download edited (compress)
                         </button>
                       </div>
 
