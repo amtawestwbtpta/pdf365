@@ -453,98 +453,101 @@ const App = () => {
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
-                  <h2 className="font-semibold mb-3">2) Compression</h2>
-                  <label className="block text-sm mb-1">
-                    JPEG Quality: {quality.toFixed(2)}
-                  </label>
-                  <input
-                    type="range"
-                    min={0.2}
-                    max={1}
-                    step={0.05}
-                    value={quality}
-                    onChange={(e) => setQuality(parseFloat(e.target.value))}
-                    className="w-full cursor-grabbing"
-                  />
-                  <label className="block text-sm mt-3 mb-1">
-                    Render Scale (DPI): {scale.toFixed(2)}×
-                  </label>
-                  <input
-                    type="range"
-                    min={0.5}
-                    max={2}
-                    step={0.1}
-                    value={scale}
-                    onChange={(e) => setScale(parseFloat(e.target.value))}
-                    className="w-full cursor-grabbing"
-                  />
-                  <p className="mt-2 text-xs text-gray-500">
-                    Lower quality/scale ⇒ smaller file, but lower clarity.
-                  </p>
-                </div>
-
                 {pdf && pages.length > 0 && (
-                  <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm space-y-2">
-                    <h2 className="font-semibold">3) Page Actions</h2>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={selectAll}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
-                      >
-                        Select all
-                      </button>
-                      <button
-                        type="button"
-                        onClick={clearSel}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
-                      >
-                        Clear
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onRotateSelected}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
-                      >
-                        Rotate selected
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onDeleteSelected}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
-                      >
-                        Delete selected
-                      </button>
+                  <>
+                    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm">
+                      <h2 className="font-semibold mb-3">2) Compression</h2>
+                      <label className="block text-sm mb-1">
+                        JPEG Quality: {quality.toFixed(2)}
+                      </label>
+                      <input
+                        type="range"
+                        min={0.2}
+                        max={1}
+                        step={0.05}
+                        value={quality}
+                        onChange={(e) => setQuality(parseFloat(e.target.value))}
+                        className="w-full cursor-grabbing"
+                      />
+                      <label className="block text-sm mt-3 mb-1">
+                        Render Scale (DPI): {scale.toFixed(2)}×
+                      </label>
+                      <input
+                        type="range"
+                        min={0.5}
+                        max={2}
+                        step={0.1}
+                        value={scale}
+                        onChange={(e) => setScale(parseFloat(e.target.value))}
+                        className="w-full cursor-grabbing"
+                      />
+                      <p className="mt-2 text-xs text-gray-500">
+                        Lower quality/scale ⇒ smaller file, but lower clarity.
+                      </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={onExtractRange}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-emerald-600 text-white hover:bg-blue-700"
-                      >
-                        Cut / Extract range…
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onDownloadSelected}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
-                      >
-                        Download selected
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onDownloadAll}
-                        className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
-                      >
-                        Download edited (compress)
-                      </button>
-                    </div>
+                    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 shadow-sm space-y-2">
+                      <h2 className="font-semibold">3) Page Actions</h2>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={selectAll}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
+                        >
+                          Select all
+                        </button>
+                        <button
+                          type="button"
+                          onClick={clearSel}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-blue-700"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onRotateSelected}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-blue-700"
+                        >
+                          Rotate selected
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onDeleteSelected}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-red-900"
+                        >
+                          Delete selected
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={onExtractRange}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-emerald-600 text-white hover:bg-blue-700"
+                        >
+                          Cut / Extract range…
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onDownloadSelected}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-indigo-700 text-white hover:bg-blue-700"
+                        >
+                          Download selected
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onDownloadAll}
+                          className="cursor-pointer px-3 py-2 rounded-xl bg-black text-white hover:bg-blue-700"
+                        >
+                          Download edited (compress)
+                        </button>
+                      </div>
 
-                    {status && (
-                      <div className="text-xs text-gray-500 pt-2">{status}</div>
-                    )}
-                  </div>
+                      {status && (
+                        <div className="text-xs text-gray-500 pt-2">
+                          {status}
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </>
             ) : (
